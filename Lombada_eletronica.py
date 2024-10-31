@@ -10,7 +10,7 @@ global tempo_inicio
 tracker = EuclideanDistTracker()
 
 # cap = cv2.VideoCapture("Resources/traffic3.mp4")  # Comentado: Abre um vídeo específico no caminho "Resources/traffic3.mp4"
-cap = cv2.VideoCapture("traffic4.mp4")  # fonte do video"
+cap = cv2.VideoCapture(1)  # fonte do video"
 
 f = 30  # Define a variável 'f' com valor 25 (frames por segundo)
 w = int(1000 / (f - 1))                                                      # Calcula o tempo entre quadros
@@ -29,14 +29,15 @@ while True:                                                                 # In
     ret, frame = cap.read()                                                 # Lê um frame do vídeo
     if not ret:                                                             # Se não conseguir ler o frame (fim do vídeo), sai do loop
         break
-    frame = cv2.resize(frame, None, fx=0.5, fy=0.5)                             # Redimensiona o frame pela metade
+    frame = cv2.resize(frame, None, fx=1.2, fy=1.2) 
+    #frame = cv2.resize(frame, None, fx=0.5, fy=0.5                              # Redimensiona o frame pela metade
     height, width, _ = frame.shape                                           # Obtém a altura e a largura do frame
 
     # print(height, width)                                                   # (Comentado) Imprime a altura e largura do frame
     # 540, 960                                                              # (Comentado) Exemplo de dimensões possíveis
 
     # Extract ROI                                                            # Extrai a Região de Interesse (ROI)
-    roi = frame[50:540,200:960]                                           # [50:540,200:960]
+    roi = frame[80:440,100:560]                                           # [50:540,200:960]
 
     # MASKING METHOD 1                                                       # Método de mascaramento 1
     mask = object_detector.apply(roi)                                       # Aplica o detector de objetos à ROI
@@ -56,8 +57,8 @@ while True:                                                                 # In
 
     for cnt in contours:                                                     # Para cada contorno encontrado
         area = cv2.contourArea(cnt)                                         # Calcula a área do contorno
-        # THRESHOLD                                                          # Limite
-        if area > 700:                                                      # Se a área for maior que 1000
+        # THRESHOLD                                                          # Limite 
+        if area > 400:                                                      # Se a área for maior que 1000
             x, y, w, h = cv2.boundingRect(cnt)                               # Obtém o retângulo delimitador
             cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)      # Desenha um retângulo ao redor do objeto
             detections.append([x, y, w, h])                                 # Adiciona a detecção à lista
@@ -97,6 +98,7 @@ while True:                                                                 # In
 
 if end != 1:                                                                 # Se a variável 'end' não for igual a 1
     tracker.end()                                                               # Termina o rastreamento
-
+conexao.close()
+print("Conecão fechada")
 cap.release()                                                                # Libera o vídeo capturado
 cv2.destroyAllWindows()                                                     # Fecha todas as janelas do OpenCV

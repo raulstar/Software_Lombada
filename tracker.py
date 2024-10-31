@@ -8,8 +8,8 @@ from Comunicacao_serial import*
 limit = 10  # km/hr
 inicio_max = 285 #410
 inicio_mim = 300 #430
-final_max = 200#255
-final_mim = 215##255 
+final_max = 180#255
+final_mim = 195##255 
 
 traffic_record_folder_name = "TrafficRecord"
 
@@ -56,7 +56,7 @@ class EuclideanDistTracker:
             for id, pt in self.center_points.items():
                 dist = math.hypot(cx - pt[0], cy - pt[1])
 
-                if dist < 90: #70 #distancia entre_quadros_capturados
+                if dist < 60: #70 #distancia entre_quadros_capturados #70
                     self.center_points[id] = (cx, cy)
                     objects_bbs_ids.append([x, y, w, h, id])
                     same_object_detected = True
